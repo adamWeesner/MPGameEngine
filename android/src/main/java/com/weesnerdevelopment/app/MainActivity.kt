@@ -1,6 +1,6 @@
-package com.weesnerdevelopment.android
+package com.weesnerDevelopment.app
 
-import com.weesnerdevelopment.common.App
+import com.weesnerDevelopment.common.App
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.setContent

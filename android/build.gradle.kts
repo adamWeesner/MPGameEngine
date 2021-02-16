@@ -4,7 +4,7 @@ plugins {
     kotlin("android")
 }
 
-group = "com.weesnerdevelopment"
+group = "com.weesnerDevelopment"
 version = "1.0.0"
 
 repositories {
@@ -18,7 +18,7 @@ dependencies {
 android {
     compileSdkVersion(29)
     defaultConfig {
-        applicationId = "com.weesnerdevelopment.android"
+        applicationId = "com.weesnerDevelopment.android"
         minSdkVersion(24)
         targetSdkVersion(29)
         versionCode = 1

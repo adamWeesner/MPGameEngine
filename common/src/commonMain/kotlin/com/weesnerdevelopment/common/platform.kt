@@ -1,3 +1,3 @@
-package com.weesnerdevelopment.common
+package com.weesnerDevelopment.common
 
 expect fun getPlatformName(): String

@@ -1,4 +1,4 @@
-package com.weesnerdevelopment.common
+package com.weesnerDevelopment.common
 
 import androidx.compose.material.Text
 import androidx.compose.material.Button

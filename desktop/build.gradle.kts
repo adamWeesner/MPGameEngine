@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.compose") version "0.2.0-build132"
 }
 
-group = "com.weesnerdevelopment"
+group = "com.weesnerDevelopment"
 version = "1.0.0"
 
 kotlin {
@@ -37,7 +37,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "com.weesnerdevelopment.desktop.MainKt"
+        mainClass = "com.weesnerDevelopment.desktop.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "jvm"

@@ -11,7 +11,7 @@ buildscript {
     }
 }
 
-group = "com.weesnerdevelopment"
+group = "com.weesnerDevelopment"
 version = "1.0.0"
 
 allprojects {

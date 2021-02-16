@@ -1,4 +1,4 @@
-package com.weesnerdevelopment.desktop
+package com.weesnerDevelopment.desktop
 
 import androidx.compose.desktop.Window
 import androidx.compose.material.Button
