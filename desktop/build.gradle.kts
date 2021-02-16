@@ -3,16 +3,16 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version "0.2.0-build132"
+    id("org.jetbrains.compose") version Shared.composeUiVersion
 }
 
-group = "com.weesnerDevelopment"
+group = Shared.groupId
 version = "1.0.0"
 
 kotlin {
     jvm {
         compilations.all {
-            kotlinOptions.jvmTarget = "11"
+            kotlinOptions.jvmTarget = Shared.javaVersion
         }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
@@ -28,8 +28,8 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test-junit5"))
-                implementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+                implementation(Shared.Desktop.Test.junitApi)
+                runtimeOnly(Shared.Desktop.Test.junitEngine)
             }
         }
     }
@@ -37,7 +37,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "com.weesnerDevelopment.desktop.MainKt"
+        mainClass = "${Shared.groupId}.desktop.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "jvm"

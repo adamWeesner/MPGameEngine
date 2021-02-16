@@ -1,11 +1,11 @@
 plugins {
-    id("org.jetbrains.compose") version "0.2.0-build132"
+    id("org.jetbrains.compose") version Shared.composeUiVersion
     id("com.android.application")
     kotlin("android")
 }
 
-group = "com.weesnerDevelopment"
-version = "1.0.0"
+group = Shared.groupId
+version = Shared.Android.appVersion
 
 repositories {
     google()
@@ -16,13 +16,13 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(Shared.Android.compileSdkVersion)
     defaultConfig {
-        applicationId = "com.weesnerDevelopment.android"
-        minSdkVersion(24)
-        targetSdkVersion(29)
+        applicationId = "${Shared.groupId}.android"
+        minSdkVersion(Shared.Android.minSdkVersion)
+        targetSdkVersion(Shared.Android.targetSdkVersion)
         versionCode = 1
-        versionName = "1.0"
+        versionName = Shared.Android.appVersion
     }
     buildTypes {
         getByName("release") {
