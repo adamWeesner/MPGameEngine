@@ -39,6 +39,7 @@ kotlin {
                 api("androidx.core:core-ktx:1.3.2")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
                 api("androidx.preference:preference-ktx:1.1.1")
+                api("com.github.InkApplications.kimchi:kimchi-jvm:1.0.2")
             }
         }
         val androidTest by getting {
@@ -50,6 +51,7 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
+                api("com.github.InkApplications.kimchi:kimchi-jvm:1.0.2")
             }
         }
         val desktopTest by getting {
