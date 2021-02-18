@@ -1,7 +1,10 @@
 package com.weesnerDevelopment.toyGameEngine
 
+import kimchi.Kimchi
 import kimchi.logger.LogLevel
 import kimchi.logger.LogWriter
+
+typealias Logger = Kimchi
 
 class ConsoleLogger : LogWriter {
     override fun log(level: LogLevel, message: String, cause: Throwable?) {
