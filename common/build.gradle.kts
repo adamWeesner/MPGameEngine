@@ -51,6 +51,7 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
+                api("com.tagtraum:ffsampledsp-complete:0.9.32")
                 api("com.github.InkApplications.kimchi:kimchi-jvm:1.0.2")
             }
         }
