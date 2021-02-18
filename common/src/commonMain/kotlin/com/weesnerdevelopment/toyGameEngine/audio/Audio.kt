@@ -2,12 +2,12 @@ package com.weesnerDevelopment.toyGameEngine.audio
 
 import com.weesnerDevelopment.toyGameEngine.math.map
 
-interface Audio {
+expect class Audio {
     fun newMusic(fileName: String): Music
     fun newSound(fileName: String): Sound
 }
 
-interface Music {
+expect class Music {
     val looping: Boolean
     val playing: Boolean
     val stopped: Boolean
@@ -22,7 +22,7 @@ interface Music {
     fun dispose()
 }
 
-interface Sound {
+expect class Sound {
     fun play(volume: Number)
 
     fun dispose()
