@@ -29,47 +29,65 @@ internal class AudioUtils(
 
     var stopped = false
     var paused = false
+    private var pausePosition = -1
 
     fun playAudio(volume: Number) {
-        val soundBuffer = ByteArray(4096)
-        var justRead: Int
-        // convert to raw PCM samples with the AudioSystem
-        try {
-            AudioSystem.getAudioInputStream(desiredFormat, fileIn).use { rawIn ->
-                line.open()
+        Thread {
+            var samplesRead = 0
+            val soundBuffer = ByteArray(4096)
+            // convert to raw PCM samples with the AudioSystem
+            try {
+                AudioSystem.getAudioInputStream(desiredFormat, fileIn).use { rawIn ->
+                    line.open()
 
-                if (line.isControlSupported(FloatControl.Type.VOLUME)) {
-                    (line.getControl(FloatControl.Type.VOLUME) as FloatControl).apply {
-                        value = volume.toFloat()
-                        Logger.trace("volume used $volume")
+                    if (line.isControlSupported(FloatControl.Type.VOLUME)) {
+                        (line.getControl(FloatControl.Type.VOLUME) as FloatControl).apply {
+                            value = volume.toFloat()
+                            Logger.trace("volume used $volume")
+                        }
+                    } else if (line.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                        (line.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl).apply {
+                            value = 20f * log10(volume.toFloat() / 100)
+                            Logger.trace("gain used $value")
+                        }
                     }
-                } else if (line.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-                    (line.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl).apply {
-                        value = 20f * log10(volume.toFloat() / 100)
-                        Logger.trace("gain used $value")
+
+                    isPlaying = true
+                    line.start()
+
+                    var bytesRead = rawIn.read(soundBuffer)
+                    while (bytesRead >= 0) {
+                        if (stopped) {
+                            line.stop()
+                            break
+                        }
+                        if (paused) {
+                            runCatching { Thread.sleep(20) }
+                            continue
+                        }
+
+                        samplesRead += bytesRead
+
+                        if (samplesRead >= 0) {
+                            if (pausePosition < 0)
+                                pausePosition = (samplesRead - bytesRead) / 4
+                            // only write bytes we really read, not more!
+                            line.write(soundBuffer, 0, bytesRead)
+                            //Logger.trace("Current position in microseconds: ${line.microsecondPosition}")
+                        }
+                        bytesRead = rawIn.read(soundBuffer)
                     }
                 }
-
-                isPlaying = true
-                line.start()
-
-                while (rawIn.read(soundBuffer).also { justRead = it } >= 0) {
-                    // only write bytes we really read, not more!
-                    line.write(soundBuffer, 0, justRead)
-                    Logger.trace("Current position in microseconds: ${line.microsecondPosition}")
-
-                }
+            } catch (e: IOException) {
+                Logger.error("Failed to play sound", e)
+            } catch (e: LineUnavailableException) {
+                Logger.error("Failed to play sound", e)
+            } finally {
+                isPlaying = false
+                line.drain()
+                line.stop()
             }
-        } catch (e: IOException) {
-            Logger.error("Failed to play sound", e)
-        } catch (e: LineUnavailableException) {
-            Logger.error("Failed to play sound", e)
-        } finally {
-            println("finally tripped...")
-            isPlaying = false
-            line.drain()
-            line.stop()
-        }
+        }.start()
     }
 
     /**

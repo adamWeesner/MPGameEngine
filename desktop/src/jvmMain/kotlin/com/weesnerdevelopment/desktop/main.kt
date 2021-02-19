@@ -21,13 +21,15 @@ fun main() = Window {
     val (playSound, setPlaySound) = remember { mutableStateOf(false) }
 
     if (playSound) {
-        rememberCoroutineScope().launch(Dispatchers.IO) {
-            println("should be playing music")
-            music.play()
+        if (music.playing) {
+            music.resume()
+        } else {
+            rememberCoroutineScope().launch(Dispatchers.IO) {
+                music.play()
+            }
         }
     } else {
         if (music.playing) {
-            println("should be pausing music")
             music.pause()
         }
     }

@@ -29,6 +29,10 @@ actual class Music(
         audioUtils.paused = true
     }
 
+    fun resume() {
+        audioUtils.paused = false
+    }
+
     actual fun setLooping(looping: Boolean) {
         mutableLooping = looping
     }
