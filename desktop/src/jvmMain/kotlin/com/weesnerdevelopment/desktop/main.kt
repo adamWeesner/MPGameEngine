@@ -21,17 +21,15 @@ fun main() = Window {
     val (playSound, setPlaySound) = remember { mutableStateOf(false) }
 
     if (playSound) {
-        if (music.playing) {
-            music.resume()
-        } else {
+        if (music.stopped) {
             rememberCoroutineScope().launch(Dispatchers.IO) {
                 music.play()
             }
+        } else {
+            music.resume()
         }
     } else {
-        if (music.playing) {
-            music.pause()
-        }
+        if (music.playing) music.pause()
     }
 
     var text by remember { mutableStateOf("Hello, World!") }

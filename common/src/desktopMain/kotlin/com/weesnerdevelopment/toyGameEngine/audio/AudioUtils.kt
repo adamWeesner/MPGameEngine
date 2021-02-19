@@ -27,7 +27,7 @@ internal class AudioUtils(
     var isPlaying = false
         private set
 
-    var stopped = false
+    var stopped = true
     var paused = false
     private var pausePosition = -1
 
@@ -53,6 +53,7 @@ internal class AudioUtils(
                     }
 
                     isPlaying = true
+                    stopped = false
                     line.start()
 
                     var bytesRead = rawIn.read(soundBuffer)
@@ -84,6 +85,7 @@ internal class AudioUtils(
                 Logger.error("Failed to play sound", e)
             } finally {
                 isPlaying = false
+                stopped = true
                 line.drain()
                 line.stop()
             }

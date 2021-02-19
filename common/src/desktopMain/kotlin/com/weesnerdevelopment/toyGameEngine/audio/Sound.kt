@@ -5,9 +5,7 @@ actual class Sound(
 ) {
     private val audioUtils = AudioUtils(fileName)
 
-    actual fun play(volume: Number) {
-        audioUtils.playAudio(volume)
-    }
+    actual fun play(volume: Number) = audioUtils.playAudio(volume)
 
     actual fun dispose() {
         // no-op

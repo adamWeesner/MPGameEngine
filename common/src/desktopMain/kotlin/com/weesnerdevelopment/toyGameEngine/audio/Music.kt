@@ -17,9 +17,7 @@ actual class Music(
         get() = audioUtils.stopped
 
 
-    actual fun play() {
-        audioUtils.playAudio(volume)
-    }
+    actual fun play() = audioUtils.playAudio(volume)
 
     actual fun stop() {
         audioUtils.stopped = true
