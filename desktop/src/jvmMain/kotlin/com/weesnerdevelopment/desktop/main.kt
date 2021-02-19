@@ -16,15 +16,20 @@ val audio = Audio()
 
 fun main() = Window {
     remember { Kimchi.addLog(ConsoleLogger()) }
-    val sound = audio.newSound("jump.wav")
+    val music = remember { audio.newMusic("music.mp3") }
 
     val (playSound, setPlaySound) = remember { mutableStateOf(false) }
 
     if (playSound) {
         rememberCoroutineScope().launch(Dispatchers.IO) {
-            sound.play(100)
+            println("should be playing music")
+            music.play()
         }
-        setPlaySound(false)
+    } else {
+        if (music.playing) {
+            println("should be pausing music")
+            music.pause()
+        }
     }
 
     var text by remember { mutableStateOf("Hello, World!") }
@@ -32,7 +37,7 @@ fun main() = Window {
     MaterialTheme {
         Button(onClick = {
             text = "Hello, Desktop Jvm ${Vector2D(1, 1)}!"
-            setPlaySound(true)
+            setPlaySound(!playSound)
         }) {
             Text(text)
         }
