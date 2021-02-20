@@ -5,7 +5,7 @@ actual class Music(
 ) {
     private var volume: Number = 100
     private var mutableLooping = false
-    private val audioUtils = AudioUtils(fileName)
+    private val audioUtils = AudioUtils(fileName, Music::class.java.simpleName)
 
     actual val looping: Boolean
         get() = mutableLooping
