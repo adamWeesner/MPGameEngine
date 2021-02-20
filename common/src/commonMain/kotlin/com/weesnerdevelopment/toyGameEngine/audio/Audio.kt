@@ -11,6 +11,7 @@ expect class Music {
     val looping: Boolean
     val playing: Boolean
     val stopped: Boolean
+    val paused: Boolean
 
     fun play()
     fun stop()

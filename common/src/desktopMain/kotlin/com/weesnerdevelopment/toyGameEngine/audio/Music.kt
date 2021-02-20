@@ -16,6 +16,8 @@ actual class Music(
     actual val stopped: Boolean
         get() = audioUtils.stopped
 
+    actual val paused: Boolean
+        get() = audioUtils.paused
 
     actual fun play() = audioUtils.playAudio(volume)
 

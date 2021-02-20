@@ -4,10 +4,8 @@ import androidx.compose.desktop.Window
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -70,151 +68,103 @@ fun main() = defaultFs.dataCopy().let {
         remember { Kimchi.addLog(ConsoleLogger()) }
 
         val music = remember { audio.newMusic("music.mp3") }
-        val (textMusic, setTextMusic) = remember { mutableStateOf("Play Music") }
-        val (playMusic, setPlayMusic) = remember { mutableStateOf(false) }
-
         val sound = remember { audio.newSound("click.ogg") }
-        val textSound by remember { mutableStateOf("Play Sound") }
-        val (playSound, setPlaySound) = remember { mutableStateOf(false) }
-
-        val (readFile, setReadFile) = remember { mutableStateOf(false) }
         val (fileText, setFileText) = remember { mutableStateOf("") }
-
-        val (readAsset, setReadAsset) = remember { mutableStateOf(false) }
         val (assetText, setAssetText) = remember { mutableStateOf("") }
-
-        val (writeFile, setWriteFile) = remember { mutableStateOf(false) }
         val (writtenFileData, setWrittenFileData) = remember { mutableStateOf("") }
-
-        val (readImage, setReadImage) = remember { mutableStateOf(false) }
         val (image, setImage) = remember { mutableStateOf<ImageBitmap?>(null) }
-
-        if (playMusic) {
-            if (music.stopped) music.play()
-            else music.resume()
-        } else {
-            if (music.playing) music.pause()
-        }
-
-        if (playSound) {
-            setPlaySound(false)
-            sound.play(100)
-        }
-
-        if (readFile) {
-            if (fileText.isBlank()) setFileText(fileIO.readFile("file.txt"))
-            else setFileText("")
-            setReadFile(false)
-        }
-
-        if (readAsset) {
-            if (assetText.isBlank()) setAssetText(fileIO.readFile("asset.txt"))
-            else setAssetText("")
-            setReadAsset(false)
-        }
-
-        if (writeFile) {
-            setWriteFile(false)
-            if (writtenFileData.isBlank()) {
-                fileIO.writeFile("written.txt", "this is a written file\nit is here")
-                setWrittenFileData(fileIO.readFile("written.txt"))
-            } else {
-                fileIO.writeFile("written.txt", "")
-                setWrittenFileData(fileIO.readFile("written.txt"))
-            }
-        }
-
-        if (readImage) {
-            setReadImage(false)
-            if (image != null) {
-                setImage(null)
-            } else {
-                val myImage = GraphicsImage(
-                    ImageIO.read(assetsFs["image.jpg"]),
-                    Graphics.GraphicsImageFormat.ARGB8888
-                )
-                val byteStream = ByteArrayOutputStream()
-
-                ImageIO.write(myImage.image, "jpg", byteStream)
-
-                setImage(
-                    org.jetbrains.skija.Image.makeFromEncoded(byteStream.toByteArray())
-                        .asImageBitmap()
-                )
-            }
-        }
 
         MaterialTheme {
             Column {
-                Button(
-                    modifier = Modifier.padding(4.dp),
-                    onClick = {
-                        setPlayMusic(!playMusic)
-                        setTextMusic(if (playMusic) "Play Music" else "Pause Music")
-                    }) {
-                    Text(textMusic)
+                TestingModule(
+                    text = "Play Music",
+                    lowerPart = {}
+                ) { updateText ->
+                    updateText(if (music.playing && !music.paused) "Play Music" else "Pause Music")
+                    println("button pressed ${music.stopped} | ${music.playing} | ${music.paused}")
+                    when {
+                        music.stopped -> music.play()
+                        music.paused -> music.resume()
+                        music.playing -> music.pause()
+                    }
                 }
 
-                Button(
-                    modifier = Modifier.padding(4.dp),
-                    onClick = {
-                        setPlaySound(true)
-                    }) {
-                    Text(textSound)
+                TestingModule(
+                    text = "Play Sound",
+                    lowerPart = {}
+                ) {
+                    sound.play(100)
                 }
 
-                Button(
-                    modifier = Modifier.padding(4.dp),
-                    onClick = {
-                        setReadFile(true)
+                TestingModule(
+                    text = "Read File",
+                    lowerPart = {
+                        Text(
+                            modifier = Modifier.padding(4.dp),
+                            text = fileText
+                        )
                     }) {
-                    Text("Read File")
+                    if (fileText.isBlank()) setFileText(fileIO.readFile("file.txt"))
+                    else setFileText("")
                 }
 
-                Text(
-                    modifier = Modifier.padding(4.dp),
-                    text = fileText
-                )
-
-                Button(
-                    modifier = Modifier.padding(4.dp),
-                    onClick = {
-                        setReadAsset(true)
+                TestingModule(
+                    text = "Read Asset",
+                    lowerPart = {
+                        Text(
+                            modifier = Modifier.padding(4.dp),
+                            text = assetText
+                        )
                     }) {
-                    Text("Read Asset")
+                    if (assetText.isBlank()) setAssetText(fileIO.readFile("asset.txt"))
+                    else setAssetText("")
                 }
 
-                Text(
-                    modifier = Modifier.padding(4.dp),
-                    text = assetText
-                )
-
-                Button(
-                    modifier = Modifier.padding(4.dp),
-                    onClick = {
-                        setWriteFile(true)
-                    }) {
-                    Text("Write File")
+                TestingModule(
+                    text = "Write File",
+                    lowerPart = {
+                        Text(
+                            modifier = Modifier.padding(4.dp),
+                            text = writtenFileData
+                        )
+                    }
+                ) {
+                    if (writtenFileData.isBlank()) {
+                        fileIO.writeFile("written.txt", "this is a written file\nit is here")
+                        setWrittenFileData(fileIO.readFile("written.txt"))
+                    } else {
+                        fileIO.writeFile("written.txt", "")
+                        setWrittenFileData(fileIO.readFile("written.txt"))
+                    }
                 }
 
-                Text(
-                    modifier = Modifier.padding(4.dp),
-                    text = writtenFileData
-                )
+                TestingModule(
+                    text = "Read Image",
+                    lowerPart = {
+                        image?.let {
+                            Image(
+                                modifier = Modifier.padding(4.dp),
+                                bitmap = it
+                            )
+                        }
+                    }
+                ) {
+                    if (image != null) {
+                        setImage(null)
+                    } else {
+                        val myImage = GraphicsImage(
+                            ImageIO.read(assetsFs["image.jpg"]),
+                            Graphics.GraphicsImageFormat.ARGB8888
+                        )
+                        val byteStream = ByteArrayOutputStream()
 
-                Button(
-                    modifier = Modifier.padding(4.dp),
-                    onClick = {
-                        setReadImage(true)
-                    }) {
-                    Text("Read Image")
-                }
+                        ImageIO.write(myImage.image, "jpg", byteStream)
 
-                image?.let {
-                    Image(
-                        modifier = Modifier.padding(4.dp),
-                        bitmap = it
-                    )
+                        setImage(
+                            org.jetbrains.skija.Image.makeFromEncoded(byteStream.toByteArray())
+                                .asImageBitmap()
+                        )
+                    }
                 }
             }
         }
