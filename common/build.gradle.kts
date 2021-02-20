@@ -37,7 +37,7 @@ kotlin {
             dependencies {
                 api("com.google.android.material:material:1.3.0")
                 api("androidx.core:core-ktx:1.3.2")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
                 api("androidx.preference:preference-ktx:1.1.1")
                 api("com.github.InkApplications.kimchi:kimchi-jvm:1.0.2")
             }
