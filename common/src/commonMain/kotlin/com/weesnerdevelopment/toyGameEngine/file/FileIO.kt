@@ -1,6 +1,6 @@
 package com.weesnerDevelopment.toyGameEngine.file
 
-interface FileIO {
+expect class FileIO {
     /**
      * reads the given [fileName] data.
      *
