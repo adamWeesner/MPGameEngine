@@ -1,6 +1,7 @@
 package com.weesnerDevelopment.desktop
 
 import androidx.compose.desktop.Window
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -10,19 +11,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
-import com.weesnerDevelopment.toyGameEngine.ConsoleLogger
-import com.weesnerDevelopment.toyGameEngine.FileSystem
-import com.weesnerDevelopment.toyGameEngine.Logger
+import com.weesnerDevelopment.toyGameEngine.*
 import com.weesnerDevelopment.toyGameEngine.audio.Audio
-import com.weesnerDevelopment.toyGameEngine.defaultFs
 import com.weesnerDevelopment.toyGameEngine.file.FileIO
+import com.weesnerDevelopment.toyGameEngine.graphics.Graphics
+import com.weesnerDevelopment.toyGameEngine.graphics.GraphicsImage
 import kimchi.Kimchi
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+import javax.imageio.ImageIO
 
 
 val audio = Audio()
@@ -39,7 +43,7 @@ private fun FileSystem.dataCopy() {
                         println("\nentry $name found..")
 
                         val file = File("${defaultFs.basePath}${name.replace("data/", "")}")
-                        if(file.exists()) return@entry
+                        if (file.exists()) return@entry
 
                         File(file.path.replaceAfterLast("/", "")).mkdirs()
                         file.createNewFile()
@@ -82,6 +86,9 @@ fun main() = defaultFs.dataCopy().let {
         val (writeFile, setWriteFile) = remember { mutableStateOf(false) }
         val (writtenFileData, setWrittenFileData) = remember { mutableStateOf("") }
 
+        val (readImage, setReadImage) = remember { mutableStateOf(false) }
+        val (image, setImage) = remember { mutableStateOf<ImageBitmap?>(null) }
+
         if (playMusic) {
             if (music.stopped) music.play()
             else music.resume()
@@ -114,6 +121,26 @@ fun main() = defaultFs.dataCopy().let {
             } else {
                 fileIO.writeFile("written.txt", "")
                 setWrittenFileData(fileIO.readFile("written.txt"))
+            }
+        }
+
+        if (readImage) {
+            setReadImage(false)
+            if (image != null) {
+                setImage(null)
+            } else {
+                val myImage = GraphicsImage(
+                    ImageIO.read(assetsFs["image.jpg"]),
+                    Graphics.GraphicsImageFormat.ARGB8888
+                )
+                val byteStream = ByteArrayOutputStream()
+
+                ImageIO.write(myImage.image, "jpg", byteStream)
+
+                setImage(
+                    org.jetbrains.skija.Image.makeFromEncoded(byteStream.toByteArray())
+                        .asImageBitmap()
+                )
             }
         }
 
@@ -174,6 +201,21 @@ fun main() = defaultFs.dataCopy().let {
                     modifier = Modifier.padding(4.dp),
                     text = writtenFileData
                 )
+
+                Button(
+                    modifier = Modifier.padding(4.dp),
+                    onClick = {
+                        setReadImage(true)
+                    }) {
+                    Text("Read Image")
+                }
+
+                image?.let {
+                    Image(
+                        modifier = Modifier.padding(4.dp),
+                        bitmap = it
+                    )
+                }
             }
         }
     }
