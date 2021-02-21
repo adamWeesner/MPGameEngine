@@ -1,9 +1,11 @@
 package com.weesnerDevelopment.desktop
 
 import androidx.compose.desktop.Window
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +19,10 @@ import com.weesnerDevelopment.toyGameEngine.audio.Audio
 import com.weesnerDevelopment.toyGameEngine.file.FileIO
 import com.weesnerDevelopment.toyGameEngine.graphics.Graphics
 import com.weesnerDevelopment.toyGameEngine.graphics.GraphicsImage
+import com.weesnerDevelopment.toyGameEngine.graphics.GraphicsImageFormat
+import com.weesnerDevelopment.toyGameEngine.math.Vector2D
 import kimchi.Kimchi
+import java.awt.Color
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -25,7 +30,6 @@ import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import javax.imageio.ImageIO
-
 
 val audio = Audio()
 val fileIO = FileIO()
@@ -73,9 +77,10 @@ fun main() = defaultFs.dataCopy().let {
         val (assetText, setAssetText) = remember { mutableStateOf("") }
         val (writtenFileData, setWrittenFileData) = remember { mutableStateOf("") }
         val (image, setImage) = remember { mutableStateOf<ImageBitmap?>(null) }
+        val (drawLine, setDrawLine) = remember { mutableStateOf(false) }
 
         MaterialTheme {
-            Column {
+            ScrollableColumn {
                 TestingModule(
                     text = "Play Music",
                     lowerPart = {}
@@ -154,7 +159,7 @@ fun main() = defaultFs.dataCopy().let {
                     } else {
                         val myImage = GraphicsImage(
                             ImageIO.read(assetsFs["image.jpg"]),
-                            Graphics.GraphicsImageFormat.ARGB8888
+                            GraphicsImageFormat.ARGB8888
                         )
                         val byteStream = ByteArrayOutputStream()
 
@@ -165,6 +170,23 @@ fun main() = defaultFs.dataCopy().let {
                                 .asImageBitmap()
                         )
                     }
+                }
+
+                TestingModule(
+                    text = "Draw Line",
+                    lowerPart = {
+                        if (drawLine) {
+                            Canvas(modifier = Modifier.size(100.dp)) {
+                                Graphics(this).drawLine(
+                                    Vector2D(10, 10),
+                                    Vector2D(90, 40),
+                                    Color.BLACK.rgb
+                                )
+                            }
+                        }
+                    }
+                ) {
+                    setDrawLine(!drawLine)
                 }
             }
         }

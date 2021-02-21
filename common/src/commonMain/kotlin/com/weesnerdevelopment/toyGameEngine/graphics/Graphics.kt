@@ -3,12 +3,7 @@ package com.weesnerDevelopment.toyGameEngine.graphics
 import com.weesnerDevelopment.toyGameEngine.math.Size
 import com.weesnerDevelopment.toyGameEngine.math.Vector2D
 
-interface Graphics {
-    enum class GraphicsImageFormat {
-        ARGB8888,
-        RGB565,
-    }
-
+expect class Graphics {
     val size: Size
 
     /**
@@ -56,4 +51,9 @@ interface Graphics {
      * Draws rectangular portions of a image to the framebuffer at the position (top left corner).
      */
     fun drawImage(image: GraphicsImage, position: Vector2D)
+}
+
+enum class GraphicsImageFormat {
+    ARGB8888,
+    RGB565,
 }

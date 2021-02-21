@@ -5,7 +5,7 @@ import com.weesnerDevelopment.toyGameEngine.math.Size
 
 actual class GraphicsImage(
     val bitmap: Bitmap,
-    actual val format: Graphics.GraphicsImageFormat
+    actual val format: GraphicsImageFormat
 ) {
     actual val size: Size = Size(
         bitmap.width,

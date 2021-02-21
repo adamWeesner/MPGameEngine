@@ -4,7 +4,7 @@ import com.weesnerDevelopment.toyGameEngine.math.Size
 
 expect class GraphicsImage {
     val size: Size
-    val format: Graphics.GraphicsImageFormat
+    val format: GraphicsImageFormat
 
     fun dispose()
 }

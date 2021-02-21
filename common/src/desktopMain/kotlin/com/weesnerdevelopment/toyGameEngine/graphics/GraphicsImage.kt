@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage
 
 actual class GraphicsImage(
     val image: BufferedImage,
-    actual val format: Graphics.GraphicsImageFormat
+    actual val format: GraphicsImageFormat
 ) {
     actual val size: Size = Size(
         image.width,

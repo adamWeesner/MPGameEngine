@@ -30,6 +30,9 @@ actual class Music(
     actual val stopped: Boolean
         get() = !isPrepared
 
+    actual val paused: Boolean
+        get() = isPrepared && !mediaPlayer.isPlaying
+
     actual fun play() {
         if (mediaPlayer.isPlaying) return
 
