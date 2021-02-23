@@ -1,6 +1,6 @@
 package com.weesnerDevelopment.toyGameEngine.game
 
-import com.weesnerDevelopment.toyGameEngine.input.Input
+import com.weesnerDevelopment.toyGameEngine.input.TouchEvent
 import com.weesnerDevelopment.toyGameEngine.math.*
 
 abstract class Screen(game: Game) {
@@ -13,7 +13,7 @@ abstract class Screen(game: Game) {
     open fun dispose() {}
 
     fun inBounds(
-        event: Input.TouchEvent,
+        event: TouchEvent,
         position: Vector2D,
         size: Size,
         truth: () -> Unit

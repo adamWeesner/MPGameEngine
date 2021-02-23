@@ -2,7 +2,7 @@ package com.weesnerDevelopment.toyGameEngine.game
 
 import com.weesnerDevelopment.toyGameEngine.graphics.Graphics
 import com.weesnerDevelopment.toyGameEngine.graphics.GraphicsImage
-import com.weesnerDevelopment.toyGameEngine.input.Input
+import com.weesnerDevelopment.toyGameEngine.input.TouchEvent
 import com.weesnerDevelopment.toyGameEngine.math.*
 
 abstract class UiComponent(
@@ -11,7 +11,7 @@ abstract class UiComponent(
 ) {
     abstract fun draw(graphics: Graphics)
 
-    open fun onClick(event: Input.TouchEvent, click: () -> Unit) {
+    open fun onClick(event: TouchEvent, click: () -> Unit) {
         val size = this.size!!
         val pos = event.position
         if (
@@ -42,7 +42,7 @@ data class Image(
             graphics.drawImage(image, position, offset!!, size!!)
     }
 
-    override fun onClick(event: Input.TouchEvent, click: () -> Unit) {
+    override fun onClick(event: TouchEvent, click: () -> Unit) {
         super.onClick(event, click)
     }
 }

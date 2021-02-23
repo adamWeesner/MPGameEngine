@@ -20,6 +20,7 @@ import com.weesnerDevelopment.toyGameEngine.file.FileIO
 import com.weesnerDevelopment.toyGameEngine.graphics.Graphics
 import com.weesnerDevelopment.toyGameEngine.graphics.GraphicsImage
 import com.weesnerDevelopment.toyGameEngine.graphics.GraphicsImageFormat
+import com.weesnerDevelopment.toyGameEngine.input.Input
 import com.weesnerDevelopment.toyGameEngine.math.Vector2D
 import kimchi.Kimchi
 import java.awt.Color
@@ -69,6 +70,7 @@ fun main() = defaultFs.dataCopy().let {
     Window(
         title = "Desktop App"
     ) {
+        remember { Input() }
         remember { Kimchi.addLog(ConsoleLogger()) }
 
         val music = remember { audio.newMusic("music.mp3") }
